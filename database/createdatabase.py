@@ -9,6 +9,7 @@ class CreateDataBaseWindow(Frame):
         Frame.__init__(self,master)
         self.master = master
         self.databaseFilePath = ""
+        self.tableEntry = None
 
         self.init_window()
 
@@ -30,8 +31,8 @@ class CreateDataBaseWindow(Frame):
         tableLabel = Label(self, text="表名")
         tableLabel.grid(row=0,column=2)
 
-        tableEntry = Entry(self)
-        tableEntry.grid(row=0,column=3)
+        self.tableEntry = Entry(self)
+        self.tableEntry.grid(row=0,column=3)
 
 
         createTableBut = Button(self,text="建设表",command=self.createTable)
@@ -52,4 +53,4 @@ class CreateDataBaseWindow(Frame):
 
 
     def createTable(self):
-        print("fffffffffffffffffff")
+        print("fffffffffffffffffff",self.tableEntry.get())
