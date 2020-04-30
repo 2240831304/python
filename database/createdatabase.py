@@ -10,6 +10,7 @@ class CreateDataBaseWindow(Frame):
         self.master = master
         self.databaseFilePath = ""
         self.tableEntry = None
+        self.databaseEntry = None
 
         self.init_window()
 
@@ -22,8 +23,8 @@ class CreateDataBaseWindow(Frame):
         databaseLabel = Label(self, text="库名")
         databaseLabel.grid(row=0,column=0)
 
-        databaseEntry = Entry(self)
-        databaseEntry.grid(row=0, column=1)
+        self.databaseEntry = Entry(self)
+        self.databaseEntry.grid(row=0, column=1)
 
         createDataBaseBut = Button(self,text="建设库",command=self.createDatabase)
         createDataBaseBut.grid(row=1,column=0,sticky=W)
@@ -44,8 +45,14 @@ class CreateDataBaseWindow(Frame):
     def createDatabase(self):
         #如果数据库不存在就会创建新的数据库
 
+        if self.databaseEntry.get() == "":
+            print("input database name is null!!!!!!!!")
+            return
+
         path = os.getcwd()
-        self.databaseFilePath = path + "/databasefile/stock.db"
+        self.databaseFilePath = path + "/databasefile/"
+
+        self.databaseFilePath = self.databaseFilePath  + self.databaseEntry.get() + ".db"
 
         print("createDatabase=",self.databaseFilePath)
         connectstate = sqlite3.connect(self.databaseFilePath)
