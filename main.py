@@ -1,8 +1,12 @@
 
 
-import tkinter
+from tkinter import *
+from Interface import mainwindow
 
-# 定义一个窗体
-top = tkinter.Tk()
 
-top.mainloop()
+if __name__ == "__main__":
+    root = Tk()
+    root.geometry("450x300")
+    app = mainwindow.MainWindow(root)
+    root.mainloop()
+
