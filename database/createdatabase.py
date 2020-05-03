@@ -35,11 +35,11 @@ class CreateDataBaseWindow(Frame):
         self.tableEntry = Entry(self)
         self.tableEntry.grid(row=0,column=3)
 
-
         createTableBut = Button(self,text="建设表",command=self.createTable)
         createTableBut.grid(row=1,column=1,sticky=E)
 
-
+        path = os.getcwd()
+        self.databaseFilePath = path + "/databasefile/"
 
 
     def createDatabase(self):
@@ -49,15 +49,37 @@ class CreateDataBaseWindow(Frame):
             print("input database name is null!!!!!!!!")
             return
 
-        path = os.getcwd()
-        self.databaseFilePath = path + "/databasefile/"
+        filePath = self.databaseFilePath  + self.databaseEntry.get() + ".db"
 
-        self.databaseFilePath = self.databaseFilePath  + self.databaseEntry.get() + ".db"
-
-        print("createDatabase=",self.databaseFilePath)
-        connectstate = sqlite3.connect(self.databaseFilePath)
+        print("createDatabase=",filePath)
+        connectstate = sqlite3.connect(filePath)
         connectstate.close()
 
 
     def createTable(self):
-        print("fffffffffffffffffff",self.tableEntry.get())
+
+        if self.tableEntry.get() == "":
+            print("input table name is null!!!!!!!!")
+            return
+
+        filePath = self.databaseFilePath  + "stock.db"
+        print("database filepath =",filePath)
+
+
+        sql = "create table stock(id INTEGER PRIMARY KEY  AUTOINCREMENT ,name varchar(20)," \
+              "codename varchar(10),minprice INTEGER,maxprice INTEGER,curprice INTEGER,state INTEGER)"
+
+        connectstate = sqlite3.connect(filePath)
+        cur = connectstate.cursor()
+        try:
+            cur.execute(sql)
+        except Exception as e:
+            print(e)
+            print('创建表失败')
+        finally:
+            pass
+
+        # 关闭游标
+        cur.close()
+        # 关闭连接
+        connectstate.close()
