@@ -29,7 +29,7 @@ class SelectDataWindow(Frame):
         selectBut.grid(row=1, column=0, sticky=E)
 
         self.tableList = ttk.Treeview(self)
-        self.tableList.grid(row=2)
+        self.tableList.grid(row=2, column=0)
         self.tableList['columns'] = ['name','minprice','maxprice','curprice']
         #self.tableList.pack()
         self.tableList.column("name", width=50)
