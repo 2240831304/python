@@ -37,7 +37,7 @@ class InsertShareWindow(Frame):
         self.minpriceEntry = Entry(self)
         self.minpriceEntry.grid(row=2,column=1)
 
-        maxprice = Label(self,text="最小价格")
+        maxprice = Label(self,text="最大价格")
         maxprice.grid(row=3,column=0)
         self.maxpriceEntry = Entry(self)
         self.maxpriceEntry.grid(row=3,column=1)

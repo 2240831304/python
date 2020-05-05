@@ -11,7 +11,7 @@ requesturl = "http://hq.sinajs.cn/list="
 
 class ObtainData:
     def __init__(self):
-        self.executeId = 3
+        self.executeId = 1
         self.state = True
 
         self.connect = None
@@ -42,7 +42,7 @@ class ObtainData:
         while valuePt.value :
             codename = self.getStockNum(self.executeId)
             if codename == "" :
-                self.executeId = 3
+                self.executeId = 1
                 print("obtaindata.py requestData finished!!!!!!!!")
                 continue
                 #break
@@ -88,4 +88,4 @@ class ObtainData:
     def setExecuteState(self,flag):
         self.state = flag
         self.progressValue.value = 0
-        #self.progressObject.join()
+        self.progressObject.join()
