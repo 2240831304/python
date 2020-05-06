@@ -19,6 +19,7 @@ class ObtainData:
         self.databaseFilePath = ""
         self.progressObject = None
         self.progressValue = None
+        self.maxID = 0
 
 
     def openDatabase(self):
@@ -37,15 +38,19 @@ class ObtainData:
 
     def requestData(self,valuePt):
         self.openDatabase()
+        self.maxID = int(self.getMaxID())
+        print(self.maxID)
         #print(valuePt.value)
 
         while valuePt.value :
-            codename = self.getStockNum(self.executeId)
-            if codename == "" :
+            if self.executeId > self.maxID :
                 self.executeId = 1
                 print("obtaindata.py requestData finished!!!!!!!!")
                 continue
-                #break
+
+            codename = self.getStockNum(self.executeId)
+            if codename == "" :
+                continue
             url = requesturl + str(codename)
             #print(url)
             req = urllib.request.urlopen(url)
@@ -65,7 +70,7 @@ class ObtainData:
 
         datalist = tempData.split(",")
         #print(datalist[3])
-        self.insertData(datalist[3])
+        self.insertData(datalist[3],datalist[2])
 
 
     def getStockNum(self,codeId):
@@ -79,9 +84,11 @@ class ObtainData:
             return ""
 
 
-    def insertData(self,price):
-        sql = "update stock set curprice=? where id=?"
-        self.cur.execute(sql, (price, self.executeId))
+    def insertData(self,price,yesterdayprice):
+        gapnum = float(price) - float(yesterdayprice)
+        gapnum = '%.2f' % gapnum
+        sql = "update stock set curprice=?,gap=?,state=? where id=?"
+        self.cur.execute(sql, (price,gapnum,1, self.executeId))
         self.connect.commit()
 
 
@@ -89,3 +96,11 @@ class ObtainData:
         self.state = flag
         self.progressValue.value = 0
         self.progressObject.join()
+
+
+    def getMaxID(self):
+        sql = "select max(id) from stock"
+        self.cur.execute(sql)
+        result = self.cur.fetchone()
+
+        return result[0]

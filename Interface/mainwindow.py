@@ -4,7 +4,8 @@ from tkinter import *
 from database import createdatabase
 from datamanager import insertsharewindow,selectdatawindow
 from datamanager import obtaindata
-
+import platform
+import os
 
 
 class MainWindow(Frame):
@@ -41,22 +42,59 @@ class MainWindow(Frame):
         print("mainwindow createDatabaseSLot start create database!")
 
         topWindow = Toplevel(self)
-        topWindow.geometry("450x300")
+        screenwidth = topWindow.winfo_screenwidth()
+        screenheight = topWindow.winfo_screenheight()
+        systemName = platform.system()
+
+        if screenwidth > 1200:
+            topWindow.minsize(450, 300)
+        else:
+            topWindow.minsize(screenwidth - 100, screenheight - 100)
+        #topWindow.geometry("450x300")
         widget = createdatabase.CreateDataBaseWindow(topWindow)
         topWindow.mainloop()
 
 
     def insetDataSlot(self):
         topWindow = Toplevel(self)
-        topWindow.geometry("450x300")
+        screenwidth = topWindow.winfo_screenwidth()
+        screenheight = topWindow.winfo_screenheight()
+        systemName = platform.system()
+
+        if screenwidth > 1200:
+            topWindow.minsize(450, 300)
+        else:
+            topWindow.minsize(screenwidth - 100, screenheight - 100)
+        #topWindow.geometry("450x300")
         widget = insertsharewindow.InsertShareWindow(topWindow)
         topWindow.mainloop()
 
 
     def selectDataSlot(self):
         topWindow = Toplevel(self)
-        topWindow.geometry("450x300")
+        screenwidth = topWindow.winfo_screenwidth()
+        screenheight = topWindow.winfo_screenheight()
+        systemName = platform.system()
+
+        path = os.getcwd()
+        filePath = path + "/log/system.txt"
+        fileHandle = open(filePath, mode='a+')
+        fileHandle.write("system:")
+        fileHandle.write(str(systemName))
+        fileHandle.write(" ")
+        fileHandle.write(str(screenwidth))
+        fileHandle.write(" ")
+        fileHandle.write(str(screenheight))
+        fileHandle.write("\n")
+        fileHandle.close()
+
+        if screenwidth > 1200:
+            topWindow.minsize(450, 300)
+        else:
+            topWindow.minsize(screenwidth - 100, screenheight - 100)
+        #topWindow.geometry("450x300")
         widget = selectdatawindow.SelectDataWindow(topWindow)
+        widget.setSystem(1)
         topWindow.mainloop()
 
 

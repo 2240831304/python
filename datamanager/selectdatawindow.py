@@ -12,6 +12,8 @@ class SelectDataWindow(Frame):
 
         self.stateEntry = ""
         self.tableList = None
+        self.strVar = StringVar()
+        self.finishedLabel = None
 
         self.init_window()
 
@@ -27,13 +29,18 @@ class SelectDataWindow(Frame):
 
         name = Label(self,text="股票状态")
         name.grid(row=0,column=0,sticky=W)
-        self.stateEntry = Entry(self)
+        self.stateEntry = Entry(self,textvariable=self.strVar)
         self.stateEntry.grid(row=0,column=0)
 
         selectBut = Button(self, text="查询数据", command=self.selectDataSlot)
         selectBut.grid(row=1, column=0, sticky=N+S)
+        #self.finishedLabel = Label(self,text="0")
+        #self.finishedLabel.grid(row=1, column=0, sticky=W)
 
-        self.tableList = ttk.Treeview(self, show="headings")
+        style = ttk.Style(self)
+        style.configure('Treeview', rowheight=30)
+
+        self.tableList = ttk.Treeview(self, show="headings",style='Treeview')
         self.tableList.grid(row=2,column=0,sticky=W)
         self.tableList['columns'] = ['name','minprice','maxprice','curprice']
         #self.tableList.pack()
@@ -86,3 +93,6 @@ class SelectDataWindow(Frame):
         itemlist = self.tableList.get_children()
         for item in itemlist:
             self.tableList.delete(item)
+
+    def setSystem(self,name):
+        self.strVar.set(name)
