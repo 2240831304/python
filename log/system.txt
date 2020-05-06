@@ -9,3 +9,4 @@ system:Linux 1920 1080
 system:Linux 1920 1080
 system:Linux 1920 1080
 system:Linux 1920 1080
+system:Linux 1366 768
