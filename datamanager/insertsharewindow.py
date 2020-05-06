@@ -77,6 +77,10 @@ class InsertShareWindow(Frame):
             cur.execute(insertSql,(self.nameEntry.get(),self.codenameEntry.get(),
                                    self.minpriceEntry.get(),self.maxpriceEntry.get()))
             connectstate.commit()
+        else:
+            updatesql = "update stock set minprice=?,maxprice=? where codename=?"
+            cur.execute(updatesql,(self.minpriceEntry.get(),self.maxpriceEntry.get(),self.codenameEntry.get()))
+            connectstate.commit()
 
         # 关闭游标
         cur.close()
