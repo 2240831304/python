@@ -19,28 +19,34 @@ class SelectDataWindow(Frame):
     def init_window(self):
         self.master.title("查询数据")
         self.pack(fill=BOTH, expand=1)
+        self.update()
+        #print("当前窗口的宽度为", self.winfo_width())
+        #print("当前窗口的高度为", self.winfo_height())
+
+        columnWidth = int(self.winfo_width() / 4)
 
         name = Label(self,text="股票状态")
-        name.grid(row=0,column=0)
+        name.grid(row=0,column=0,sticky=W)
         self.stateEntry = Entry(self)
-        self.stateEntry.grid(row=0,column=1)
+        self.stateEntry.grid(row=0,column=0)
 
         selectBut = Button(self, text="查询数据", command=self.selectDataSlot)
-        selectBut.grid(row=1, column=0, sticky=E)
+        selectBut.grid(row=1, column=0, sticky=N+S)
 
-        self.tableList = ttk.Treeview(self)
-        self.tableList.grid(row=2, column=0)
+        self.tableList = ttk.Treeview(self, show="headings")
+        self.tableList.grid(row=2,column=0,sticky=W)
         self.tableList['columns'] = ['name','minprice','maxprice','curprice']
         #self.tableList.pack()
-        self.tableList.column("name", width=50)
-        self.tableList.column("minprice", width=50)
-        self.tableList.column("maxprice", width=50)
-        self.tableList.column("curprice", width=50)
+        self.tableList.column("#0",width=columnWidth)
+        self.tableList.column("name", width=columnWidth)
+        self.tableList.column("minprice", width=columnWidth)
+        self.tableList.column("maxprice", width=columnWidth)
+        self.tableList.column("curprice", width=columnWidth)
 
-        self.tableList.heading('name', text='股票名字')
-        self.tableList.heading('minprice', text='最小价格')
-        self.tableList.heading('maxprice', text='最大价格')
-        self.tableList.heading('curprice', text='当前价格')
+        self.tableList.heading('name', text='名字')
+        self.tableList.heading('minprice', text='最小')
+        self.tableList.heading('maxprice', text='最大')
+        self.tableList.heading('curprice', text='当前')
 
         path = os.getcwd()
         self.databaseFilePath = path + "/databasefile/"
@@ -56,9 +62,27 @@ class SelectDataWindow(Frame):
         try:
             cur.execute(selectSql,(self.stateEntry.get(),))
             resultAll = cur.fetchall()
+            self.addData(resultAll)
+            #print(resultAll)
 
         except Exception as e:
             print("查询数据库失败!!!!!!!")
         finally:
             cur.close()
             connectstate.close()
+
+
+    def addData(self,dataList):
+        self.clearItem()
+
+        index = 0
+        for data in dataList:
+            #print(data[0],data[1],data[2],data[3])
+            self.tableList.insert("",index,values=(data[0],data[1],data[2],data[3]))
+            index += 1
+
+
+    def clearItem(self):
+        itemlist = self.tableList.get_children()
+        for item in itemlist:
+            self.tableList.delete(item)
