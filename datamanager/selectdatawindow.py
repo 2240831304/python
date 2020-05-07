@@ -25,7 +25,7 @@ class SelectDataWindow(Frame):
         #print("当前窗口的宽度为", self.winfo_width())
         #print("当前窗口的高度为", self.winfo_height())
 
-        columnWidth = int(self.winfo_width() / 4)
+        columnWidth = int(self.winfo_width() / 5)
 
         name = Label(self,text="股票状态")
         name.grid(row=0,column=0,sticky=W)
@@ -42,25 +42,27 @@ class SelectDataWindow(Frame):
 
         self.tableList = ttk.Treeview(self, show="headings",style='Treeview')
         self.tableList.grid(row=2,column=0,sticky=W)
-        self.tableList['columns'] = ['name','minprice','maxprice','curprice']
+        self.tableList['columns'] = ['name','minprice','maxprice','curprice',"gap"]
         #self.tableList.pack()
         self.tableList.column("#0",width=columnWidth)
         self.tableList.column("name", width=columnWidth)
         self.tableList.column("minprice", width=columnWidth)
         self.tableList.column("maxprice", width=columnWidth)
         self.tableList.column("curprice", width=columnWidth)
+        self.tableList.column("gap", width=columnWidth)
 
         self.tableList.heading('name', text='名字')
         self.tableList.heading('minprice', text='最小')
         self.tableList.heading('maxprice', text='最大')
         self.tableList.heading('curprice', text='当前')
+        self.tableList.heading('gap', text='涨跌')
 
         path = os.getcwd()
         self.databaseFilePath = path + "/databasefile/"
 
 
     def selectDataSlot(self):
-        selectSql = "select name,minprice,maxprice,curprice from stock where state=?"
+        selectSql = "select name,minprice,maxprice,curprice,gap from stock where state=?"
 
         filePath = self.databaseFilePath + "stock.db"
         connectstate = sqlite3.connect(filePath)
@@ -85,7 +87,7 @@ class SelectDataWindow(Frame):
         index = 0
         for data in dataList:
             #print(data[0],data[1],data[2],data[3])
-            self.tableList.insert("",index,values=(data[0],data[1],data[2],data[3]))
+            self.tableList.insert("",index,values=(data[0],data[1],data[2],data[3],data[4]))
             index += 1
 
 
