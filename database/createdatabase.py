@@ -65,9 +65,10 @@ class CreateDataBaseWindow(Frame):
         filePath = self.databaseFilePath  + "stock.db"
         print("database filepath =",filePath)
 
-
-        sql = "create table stock(id INTEGER PRIMARY KEY  AUTOINCREMENT ,name varchar(20)," \
-              "codename varchar(10),minprice INTEGER,maxprice INTEGER,curprice INTEGER,state INTEGER)"
+        sql = "create table " + self.tableEntry.get()
+        sql += "(id INTEGER PRIMARY KEY  AUTOINCREMENT ,name varchar(20)," \
+              "codename varchar(10),minprice INTEGER,maxprice INTEGER,curprice INTEGER,state INTEGER," \
+              "gap INTEGER)"
 
         connectstate = sqlite3.connect(filePath)
         cur = connectstate.cursor()

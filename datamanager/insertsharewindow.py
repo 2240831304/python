@@ -19,7 +19,7 @@ class InsertShareWindow(Frame):
 
 
     def init_window(self):
-        self.master.title("创建数据库")
+        self.master.title("添加股票")
         self.pack(fill=BOTH, expand=1)
 
         name = Label(self,text="股票名字")
@@ -42,14 +42,19 @@ class InsertShareWindow(Frame):
         self.maxpriceEntry = Entry(self)
         self.maxpriceEntry.grid(row=3,column=1)
 
-        insertDataBut = Button(self,text="添加数据",command=self.insertDataSlot)
+        insertDataBut = Button(self,text="A股添加",command=self.insertDataSlot)
         insertDataBut.grid(row=4,column=0,sticky=E)
+
+        insertSmarketBut = Button(self, text="创业板添加", command=self.insertSmarketSlot)
+        insertSmarketBut.grid(row=4, column=1, sticky=E)
 
         path = os.getcwd()
         self.databaseFilePath = path + "/databasefile/"
 
 
     def insertDataSlot(self):
+        if self.codenameEntry.get() == "":
+            return
 
         insertSql = "insert into stock(name,codename,minprice,maxprice) values(?,?,?,?)"
         selectSql = "select * from stock where codename=?"
@@ -65,7 +70,7 @@ class InsertShareWindow(Frame):
             resultAll = cur.fetchall()
             if resultAll :
                 IsNeedInsertData = False
-                print("insert share stock data ,data is exist=true!!")
+                print("insert share stock name ,data is exist=",self.codenameEntry.get())
 
         except Exception as e:
             print(e)
@@ -78,6 +83,49 @@ class InsertShareWindow(Frame):
                                    self.minpriceEntry.get(),self.maxpriceEntry.get()))
             connectstate.commit()
         else:
+            print("insertsharewindow update stock information!!!")
+            updatesql = "update stock set minprice=?,maxprice=? where codename=?"
+            cur.execute(updatesql,(self.minpriceEntry.get(),self.maxpriceEntry.get(),self.codenameEntry.get()))
+            connectstate.commit()
+
+        # 关闭游标
+        cur.close()
+        # 关闭连接
+        connectstate.close()
+
+
+    def insertSmarketSlot(self):
+        if self.codenameEntry.get() == "":
+            return
+
+        insertSql = "insert into smarket(name,codename,minprice,maxprice) values(?,?,?,?)"
+        selectSql = "select * from smarket where codename=?"
+
+        filePath = self.databaseFilePath + "stock.db"
+        connectstate = sqlite3.connect(filePath)
+        cur = connectstate.cursor()
+
+        IsNeedInsertData = True
+
+        try:
+            cur.execute(selectSql,(self.codenameEntry.get(),))
+            resultAll = cur.fetchall()
+            if resultAll :
+                IsNeedInsertData = False
+                print("insert share stock name ,data is exist=",self.codenameEntry.get())
+
+        except Exception as e:
+            print(e)
+            print('查询数据库失败')
+        finally:
+            pass
+
+        if IsNeedInsertData :
+            cur.execute(insertSql,(self.nameEntry.get(),self.codenameEntry.get(),
+                                   self.minpriceEntry.get(),self.maxpriceEntry.get()))
+            connectstate.commit()
+        else:
+            print("insertsharewindow update stock information!!!")
             updatesql = "update stock set minprice=?,maxprice=? where codename=?"
             cur.execute(updatesql,(self.minpriceEntry.get(),self.maxpriceEntry.get(),self.codenameEntry.get()))
             connectstate.commit()

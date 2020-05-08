@@ -32,8 +32,10 @@ class SelectDataWindow(Frame):
         self.stateEntry = Entry(self,textvariable=self.strVar)
         self.stateEntry.grid(row=0,column=0)
 
-        selectBut = Button(self, text="查询数据", command=self.selectDataSlot)
-        selectBut.grid(row=1, column=0, sticky=N+S)
+        selectBut = Button(self, text="A股查询", command=self.selectDataSlot)
+        selectBut.grid(row=1, column=0, sticky=W)
+        smarketBut = Button(self, text="创业板查询", command=self.smarketSlot)
+        smarketBut.grid(row=1, column=0, sticky=N+S)
         #self.finishedLabel = Label(self,text="0")
         #self.finishedLabel.grid(row=1, column=0, sticky=W)
 
@@ -98,3 +100,23 @@ class SelectDataWindow(Frame):
 
     def setSystem(self,name):
         self.strVar.set(name)
+
+
+    def smarketSlot(self):
+        selectSql = "select name,minprice,maxprice,curprice,gap from smarket where state=?"
+
+        filePath = self.databaseFilePath + "stock.db"
+        connectstate = sqlite3.connect(filePath)
+        cur = connectstate.cursor()
+
+        try:
+            cur.execute(selectSql, (self.stateEntry.get(),))
+            resultAll = cur.fetchall()
+            self.addData(resultAll)
+            # print(resultAll)
+
+        except Exception as e:
+            print("查询数据库失败!!!!!!!")
+        finally:
+            cur.close()
+            connectstate.close()

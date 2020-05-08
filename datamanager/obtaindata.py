@@ -49,14 +49,15 @@ class ObtainData:
                 continue
 
             codename = self.getStockNum(self.executeId)
+
             if codename == "" :
+                self.executeId += 1
                 continue
             url = requesturl + str(codename)
             #print(url)
             req = urllib.request.urlopen(url)
 
             self.parseData(req.read())
-
             self.executeId += 1
 
         self.cur.close()
