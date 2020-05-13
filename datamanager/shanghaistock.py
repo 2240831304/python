@@ -6,7 +6,7 @@ from multiprocessing import Process
 import multiprocessing
 
 
-requesturl = "http://hq.sinajs.cn/list=sh"
+requesturl = "http://hq.sinajs.cn/list=s_sh"
 
 
 class ShangHaiStock:
@@ -46,7 +46,7 @@ class ShangHaiStock:
             url = requesturl + str(startID)
             #print(url)
             req = urllib.request.urlopen(url)
-            self.parseData(req.read())
+            self.parseData(req.read(),startID)
 
             startID += 1
 
@@ -65,15 +65,15 @@ class ShangHaiStock:
         self.parseData(req.read())
 
 
-    def parseData(self,data):
+    def parseData(self,data,stockId):
         tempData = data.decode("utf8","ignore")
         #print(tempData)
 
         datalist = tempData.split(",")
-        self.insertData(datalist)
+        self.insertData(datalist,stockId)
 
 
-    def insertData(self,dataList):
+    def insertData(self,dataList,stockId):
         print(dataList)
 
 
