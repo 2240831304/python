@@ -3,7 +3,7 @@ from tkinter import *
 
 from database import createdatabase
 from datamanager import insertsharewindow,selectdatawindow
-from datamanager import obtaindata
+from datamanager import obtaindata,shanghaistock
 import platform
 import os
 
@@ -16,6 +16,22 @@ class MainWindow(Frame):
         self.obtainDataBut = None
         self.obtainDataState = True
 
+        self.smarketDataGetBut = None
+        self.smarketDataGetState = True
+        self.smarketDataGetObject = None
+
+        self.shanghaiBut = None
+        self.shanghaiState = True
+        self.shanghaiObject = None
+
+        self.smallBut = None
+        self.smallState = True
+        self.smallObject = None
+
+        self.smarketBut = None
+        self.smarketState = True
+        self.smarketObject = None
+
         self.init_window()
 
 
@@ -23,6 +39,7 @@ class MainWindow(Frame):
         self.master.title("慧宝宝要学习")
         self.pack(fill=BOTH,expand=1)
         self.objectPt = obtaindata.ObtainData()
+        self.shanghaiObject = shanghaistock.ShangHaiStock()
 
         createDataBaseBut = Button(self,text="建数据库",command=self.createDatabaseSLot)
         #createDataBaseBut.place(x=10,y=10)
@@ -34,9 +51,39 @@ class MainWindow(Frame):
         selectDataBut = Button(self, text="查询数据", command=self.selectDataSlot)
         selectDataBut.grid(row=1, column=1)
 
-        self.obtainDataBut = Button(self, text="获取数据", command=self.obtainDataSlot)
-        self.obtainDataBut.grid(row=2, column=0)
+        self.smarketBut = Button(self, text="获取创业板股票", command=self.smarketSlot)
+        self.smarketBut.grid(row=2, column=0)
+        self.shanghaiBut = Button(self, text="获取上证股票", command=self.shanghaiSlot)
+        self.shanghaiBut.grid(row=2, column=1)
+        self.smallBut = Button(self, text="获取中小板股票", command=self.smallSlot)
+        self.smallBut.grid(row=2, column=2)
 
+        self.obtainDataBut = Button(self, text="获取A股数据", command=self.obtainDataSlot)
+        self.obtainDataBut.grid(row=3, column=0)
+
+        self.smarketDataGetBut = Button(self, text="获取创业板股票数据", command=self.smarketDataGetSlot)
+        self.smarketDataGetBut.grid(row=3, column=1)
+
+
+    def smarketSlot(self):
+        pass
+
+    def shanghaiSlot(self):
+        if self.shanghaiState:
+            self.shanghaiState = False
+            self.shanghaiBut["text"] = "停止请求数据"
+            self.shanghaiObject.excute()
+        else:
+            self.shanghaiState = True
+            self.shanghaiBut["text"] = "获取上证股票"
+            self.shanghaiObject.setExecuteState(False)
+
+
+    def smallSlot(self):
+        pass
+
+    def smarketDataGetSlot(self):
+        pass
 
     def createDatabaseSLot(self):
         print("mainwindow createDatabaseSLot start create database!")
@@ -105,5 +152,5 @@ class MainWindow(Frame):
             self.objectPt.execute()
         else:
             self.obtainDataState = True
-            self.obtainDataBut["text"] = "获取数据"
+            self.obtainDataBut["text"] = "获取A股数据"
             self.objectPt.setExecuteState(False)
