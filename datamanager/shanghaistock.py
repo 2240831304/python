@@ -38,6 +38,11 @@ class ShangHaiStock:
         startID = 600000
 
         while valuePt.value and (startID < 610000) :
+            state = self.getStocExist(startID)
+            if state :
+                startID += 1
+                continue
+
             url = requesturl + str(startID)
             #print(url)
             req = urllib.request.urlopen(url)
@@ -70,6 +75,19 @@ class ShangHaiStock:
 
     def insertData(self,dataList):
         print(dataList)
+
+
+    def getStocExist(self,codeId):
+        codeNum = "sh" + str(codeId)
+        sql = "select name from stock where codename=?"
+        self.cur.execute(sql, (codeNum,))
+        resultAll = self.cur.fetchone()
+        #print(resultAll[0])
+        if resultAll:
+            print("select stock name is exist,codename=",codeNum)
+            return True
+        else:
+            return False
 
 
     def setExecuteState(self,flag):
