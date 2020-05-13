@@ -3,7 +3,7 @@ from tkinter import *
 
 from database import createdatabase
 from datamanager import insertsharewindow,selectdatawindow
-from datamanager import obtaindata,shanghaistock
+from datamanager import obtaindata,shanghaistock,smarketobtaindata
 import platform
 import os
 
@@ -39,7 +39,10 @@ class MainWindow(Frame):
         self.master.title("慧宝宝要学习")
         self.pack(fill=BOTH,expand=1)
         self.objectPt = obtaindata.ObtainData()
+        self.smarketDataGetObject = smarketobtaindata.SmarketObtainData()
+
         self.shanghaiObject = shanghaistock.ShangHaiStock()
+
 
         createDataBaseBut = Button(self,text="建数据库",command=self.createDatabaseSLot)
         #createDataBaseBut.place(x=10,y=10)
@@ -83,7 +86,15 @@ class MainWindow(Frame):
         pass
 
     def smarketDataGetSlot(self):
-        pass
+        if self.smarketDataGetState:
+            self.smarketDataGetState = False
+            self.smarketDataGetBut["text"] = "停止请求数据"
+            self.smarketDataGetObject.execute()
+        else:
+            self.smarketDataGetState =  True
+            self.smarketDataGetBut["text"] = "获取创业板股票数据"
+            self.smarketDataGetObject.setExecuteState(False)
+
 
     def createDatabaseSLot(self):
         print("mainwindow createDatabaseSLot start create database!")
