@@ -10,7 +10,7 @@ import requests
 requesturl = "http://qt.gtimg.cn/q=s_sz"
 
 
-class ShangHaiStock:
+class SmarketStock:
 
     def __init__(self):
         self.progressObject = None

@@ -4,6 +4,7 @@ from tkinter import *
 from database import createdatabase
 from datamanager import insertsharewindow,selectdatawindow
 from datamanager import obtaindata,shanghaistock,smarketobtaindata
+from datamanager import smarketstock
 import platform
 import os
 
@@ -42,6 +43,7 @@ class MainWindow(Frame):
         self.smarketDataGetObject = smarketobtaindata.SmarketObtainData()
 
         self.shanghaiObject = shanghaistock.ShangHaiStock()
+        self.smarketObject = smarketstock.SmarketStock()
 
 
         createDataBaseBut = Button(self,text="建数据库",command=self.createDatabaseSLot)
@@ -69,7 +71,14 @@ class MainWindow(Frame):
 
 
     def smarketSlot(self):
-        pass
+        if self.smarketState:
+            self.smarketState = False
+            self.smarketBut["text"] = "停止请求数据"
+            self.smarketObject.excute()
+        else:
+            self.smarketState = True
+            self.smarketBut["text"] = "获取创业板股票"
+            self.smarketObject.setExecuteState(False)
 
     def shanghaiSlot(self):
         if self.shanghaiState:
