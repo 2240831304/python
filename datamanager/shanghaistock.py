@@ -39,11 +39,6 @@ class ShangHaiStock:
         startID = 600000
 
         while valuePt.value and (startID < 610000) :
-            state = self.getStocExist(startID)
-            if state :
-                startID += 1
-                continue
-
             url = requesturl + str(startID)
             #print(url)
             req = requests.get(url=url)
@@ -78,9 +73,15 @@ class ShangHaiStock:
             return
 
         strTemp = "sh" + str(stockId)
-        insertSql = "insert into stock(name,codename,curprice,gap) values(?,?,?,?)"
-        self.cur.execute(insertSql,(dataList[1],strTemp,dataList[3],dataList[4]))
-        self.connect.commit()
+        state = self.getStocExist(strTemp)
+        if state:
+            updateSql = "update stock set name=?,curprice=?,gap=? where codename=?"
+            self.cur.execute(updateSql,(dataList[1],dataList[3],dataList[4],strTemp))
+            self.connect.commit()
+        else:
+            insertSql = "insert into stock(name,codename,curprice,gap) values(?,?,?,?)"
+            self.cur.execute(insertSql,(dataList[1],strTemp,dataList[3],dataList[4]))
+            self.connect.commit()
 
 
 
