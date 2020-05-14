@@ -4,6 +4,7 @@ import urllib.request
 import sqlite3
 from multiprocessing import Process
 import multiprocessing
+import json
 
 
 #requesturl = "http://hq.sinajs.cn/list="
@@ -72,20 +73,49 @@ class StockHistoryData:
 
 
     def parseData(self,data):
-
         tempData = data.decode("utf8","ignore")
         tempData = tempData.replace("\n","")
-        print(tempData)
+        strToListData = eval(tempData)
+        dictData = strToListData[0]
+        needData = dictData["hq"]
+        # print(needData)
+
+        #['2020-05-14', '16.63', '18.15', '1.42', '8.49%', '16.62', '18.50', '307022', '54609.15', '0.15%']
+        weekMin = 0
+        weekMax = 0
+        weekGap = 0
+        yearMinPrice = 0
+        yearMaxPrice = 0
+        firstListData = needData[0]
+        weekGap = firstListData[3]
+        weekMin = firstListData[5]
+        weekMax = firstListData[6]
+        yearMinPrice = firstListData[5]
+        yearMaxPrice = firstListData[6]
+
+        for value in needData:
+            if yearMinPrice > value[5]:
+                yearMinPrice = value[5]
+
+            if yearMaxPrice < value[6]:
+                yearMaxPrice = value[6]
+
+        listData = list()
+        listData.append(yearMinPrice)
+        listData.append(yearMaxPrice)
+        listData.append(weekMin)
+        listData.append(weekMax)
+        listData.append(weekGap)
+
+        self.updateData(listData)
 
 
-        #print(dictData)
-        #listData = dictData["hq"]
-        #print(listData)
-
-
-
-    def updateData(self):
-        pass
+    def updateData(self,dataPt):
+        #print(dataPt)
+        updatesql = "update stock set minprice=?,maxprice=? where codename=?"
+        self.cur.execute(updatesql,(dataPt[0],dataPt[1],self.curExcuteCodeName))
+        self.connect.commit()
+        self.curExcuteCodeName = ""
 
 
     def insertData(self,price,yesterdayprice):
