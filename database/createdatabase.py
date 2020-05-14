@@ -12,6 +12,8 @@ class CreateDataBaseWindow(Frame):
         self.tableEntry = None
         self.databaseEntry = None
 
+        self.fieldEntry = None
+
         self.init_window()
 
 
@@ -67,8 +69,8 @@ class CreateDataBaseWindow(Frame):
 
         sql = "create table " + self.tableEntry.get()
         sql += "(id INTEGER PRIMARY KEY  AUTOINCREMENT ,name varchar(20)," \
-              "codename varchar(10),minprice INTEGER,maxprice INTEGER,curprice INTEGER,state INTEGER," \
-              "gap INTEGER)"
+              "codename varchar(10),minprice INTEGER,maxprice INTEGER,curprice INTEGER,gap INTEGER,state INTEGER," \
+              "weekmin INTEGER,weekmax INTEGER,weekgap INTEGER)"
 
         connectstate = sqlite3.connect(filePath)
         cur = connectstate.cursor()

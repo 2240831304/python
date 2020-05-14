@@ -33,6 +33,14 @@ class MainWindow(Frame):
         self.smarketState = True
         self.smarketObject = None
 
+        self.smarketHistoryBut = None
+        self.smarketHistoryState = True
+        self.smarketHistoryObject = None
+
+        self.stockHistoryBut = None
+        self.stockHistoryState = True
+        self.stockHistoryObject = None
+
         self.init_window()
 
 
@@ -64,11 +72,25 @@ class MainWindow(Frame):
         self.smallBut = Button(self, text="获取中小板股票", command=self.smallSlot)
         self.smallBut.grid(row=2, column=2)
 
-        self.obtainDataBut = Button(self, text="获取A股数据", command=self.obtainDataSlot)
-        self.obtainDataBut.grid(row=3, column=0)
+        self.stockHistoryBut = Button(self, text="获取A股历史价格", command=self.stockHistorySlot)
+        self.stockHistoryBut.grid(row=3, column=0)
 
-        self.smarketDataGetBut = Button(self, text="获取创业板股票数据", command=self.smarketDataGetSlot)
-        self.smarketDataGetBut.grid(row=3, column=1)
+        self.smarketHistoryBut = Button(self, text="获取创业板历史价格", command=self.smarketHistorySlot)
+        self.smarketHistoryBut.grid(row=3, column=1)
+
+        self.obtainDataBut = Button(self, text="获取A股实时数据", command=self.obtainDataSlot)
+        self.obtainDataBut.grid(row=4, column=0)
+
+        self.smarketDataGetBut = Button(self, text="获取创业板实时数据", command=self.smarketDataGetSlot)
+        self.smarketDataGetBut.grid(row=4, column=1)
+
+
+    def stockHistorySlot(self):
+        pass
+
+    def smarketHistorySlot(self):
+        pass
+
 
 
     def smarketSlot(self):
@@ -110,7 +132,7 @@ class MainWindow(Frame):
             self.smarketDataGetObject.execute()
         else:
             self.smarketDataGetState =  True
-            self.smarketDataGetBut["text"] = "获取创业板股票数据"
+            self.smarketDataGetBut["text"] = "获取创业板实时数据"
             self.smarketDataGetObject.setExecuteState(False)
 
 
@@ -181,5 +203,5 @@ class MainWindow(Frame):
             self.objectPt.execute()
         else:
             self.obtainDataState = True
-            self.obtainDataBut["text"] = "获取A股数据"
+            self.obtainDataBut["text"] = "获取A股实时数据"
             self.objectPt.setExecuteState(False)
