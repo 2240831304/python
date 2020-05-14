@@ -6,12 +6,14 @@ from multiprocessing import Process
 import multiprocessing
 
 
-requesturl = "http://hq.sinajs.cn/list="
+#requesturl = "http://hq.sinajs.cn/list="
+requesturl = "http://q.stock.sohu.com/hisHq?code=cn_%s&start=20190501&end=20200514&stat=0&order=D&period=m"
 
 
 class StockHistoryData:
     def __init__(self):
         self.executeId = 1
+        self.curExcuteCodeName = ""
         self.state = True
 
         self.connect = None
@@ -49,15 +51,20 @@ class StockHistoryData:
                 break
 
             codename = self.getStockNum(self.executeId)
-
             if codename == "" :
                 self.executeId += 1
                 continue
-            url = requesturl + str(codename)
-            #print(url)
-            req = urllib.request.urlopen(url)
 
+            self.curExcuteCodeName = codename
+            codename = codename.replace("sh","")
+            codename = codename.replace("sz", "")
+            url = requesturl % (codename)
+            #print(url)
+
+            req = urllib.request.urlopen(url)
+            #print(req.headers)
             self.parseData(req.read())
+
             self.executeId += 1
 
         self.cur.close()
@@ -67,11 +74,18 @@ class StockHistoryData:
     def parseData(self,data):
 
         tempData = data.decode("utf8","ignore")
-        #print(tempData)
+        tempData = tempData.replace("\n","")
+        print(tempData)
 
-        datalist = tempData.split(",")
-        #print(datalist[3])
-        self.insertData(datalist[3],datalist[2])
+
+        #print(dictData)
+        #listData = dictData["hq"]
+        #print(listData)
+
+
+
+    def updateData(self):
+        pass
 
 
     def insertData(self,price,yesterdayprice):
