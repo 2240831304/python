@@ -1,0 +1,20 @@
+# python
+http://q.stock.sohu.com/hisHq?code=cn_601058&start=20180501&end=20200520
+
+http://q.stock.sohu.com/hisHq?code=cn_600009&start=20180716&end=20180720&stat=1&order=D&period=d&callback=historySearchHandler&rt=jsonp
+
+
+http://q.stock.sohu.com/hisHq?code=cn_600009&start=20180716&end=20180720&stat=1&order=D&period=d
+
+
+参考网站：：https://blog.csdn.net/leijia_xing/article/details/81139005
+
+搜狐接口获取历史数据：：
+http://q.stock.sohu.com/hisHq?code=cn_000021&start=20180716&end=20200514&stat=0&order=D&period=m
+
+各参数的含义为：code：股票代码，以cn_开头，start:起始时间，end：截止时间，stat:统计信息，为0的时候就不返回stat对应的值了，order：排序方法（D表示降序排，A表示升序排），period：数据周期（d表示日线，m表示月线，w表示周线）。
+
+返回的数据以这条为例
+"2018-07-20","61.22","61.83","0.61","1.00%","61.22","62.69","57637","35856.55","0.53%"
+日期，开盘，收盘，涨跌，涨幅，最低，最高，成交量，成交额，换手。
+
