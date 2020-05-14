@@ -6,8 +6,8 @@ from multiprocessing import Process
 import multiprocessing
 import requests
 
-#requesturl = "http://hq.sinajs.cn/list=s_sh"
-requesturl = "http://qt.gtimg.cn/q=s_sh"
+#requesturl = "http://hq.sinajs.cn/list=s_sz"
+requesturl = "http://qt.gtimg.cn/q=s_sz"
 
 
 class ShangHaiStock:
@@ -36,9 +36,9 @@ class ShangHaiStock:
     def requestData(self, valuePt):
         self.openDatabase()
 
-        startID = 600000
+        startID = 300000
 
-        while valuePt.value and (startID < 610000) :
+        while valuePt.value and (startID < 301000) :
             url = requesturl + str(startID)
             #print(url)
             req = requests.get(url=url)
@@ -50,7 +50,7 @@ class ShangHaiStock:
 
             startID += 1
 
-        print("request all shanghai stock is finished!!!!!!!!!")
+        print("request all smarket stock is finished!!!!!!!!!")
         self.cur.close()
         self.connect.close()
 
@@ -72,26 +72,26 @@ class ShangHaiStock:
         if grice < 6:
             return
 
-        strTemp = "sh" + str(stockId)
+        strTemp = "sz" + str(stockId)
         state = self.getStocExist(strTemp)
         if state:
-            updateSql = "update stock set name=?,curprice=?,gap=? where codename=?"
+            updateSql = "update smarket set name=?,curprice=?,gap=? where codename=?"
             self.cur.execute(updateSql,(dataList[1],dataList[3],dataList[4],strTemp))
             self.connect.commit()
         else:
-            insertSql = "insert into stock(name,codename,curprice,gap) values(?,?,?,?)"
+            insertSql = "insert into smarket(name,codename,curprice,gap) values(?,?,?,?)"
             self.cur.execute(insertSql,(dataList[1],strTemp,dataList[3],dataList[4]))
             self.connect.commit()
 
 
 
     def getStocExist(self,codeId):
-        sql = "select name from stock where codename=?"
+        sql = "select name from smarket where codename=?"
         self.cur.execute(sql, (codeId,))
         resultAll = self.cur.fetchone()
         #print(resultAll[0])
         if resultAll:
-            print("select stock name is exist,codename=",codeId)
+            print("select smarket name is exist,codename=",codeId)
             return True
         else:
             return False
