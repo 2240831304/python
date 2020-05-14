@@ -65,7 +65,7 @@ class SmarketStock:
 
 
     def insertData(self,dataList,stockId):
-        print(dataList)
+        #print(dataList)
         if len(dataList) < 3:
             return
         grice = float(dataList[3])

@@ -7,10 +7,10 @@ import multiprocessing
 import requests
 
 #requesturl = "http://hq.sinajs.cn/list=s_sh"
-requesturl = "http://qt.gtimg.cn/q=s_sh"
+requesturl = "http://qt.gtimg.cn/q=s_sz00"
 
 
-class ShangHaiStock:
+class SmallStock:
 
     def __init__(self):
         self.progressObject = None
@@ -27,6 +27,20 @@ class ShangHaiStock:
         self.connect = sqlite3.connect(self.databaseFilePath)
         self.cur = self.connect.cursor()
 
+    def getNumStr(self,number):
+        strTp = ""
+        if number < 10:
+            strTp = "000" + str(number)
+        elif (number >= 10) and (number < 100):
+            strTp = "00" + str(number)
+        elif (number >= 100) and (number < 1000):
+            strTp = "0" + str(number)
+        else:
+            strTp = str(number)
+
+        return strTp
+
+
 
     def excute(self):
         self.progressValue = multiprocessing.Value("i", 1)
@@ -36,10 +50,10 @@ class ShangHaiStock:
     def requestData(self, valuePt):
         self.openDatabase()
 
-        startID = 600000
+        startID = 0
 
-        while valuePt.value and (startID < 610000) :
-            url = requesturl + str(startID)
+        while valuePt.value and (startID < 10000) :
+            url = requesturl + self.getNumStr(startID)
             #print(url)
             req = requests.get(url=url)
             #print(req.content)
@@ -50,7 +64,7 @@ class ShangHaiStock:
 
             startID += 1
 
-        print("request all shanghai stock is finished!!!!!!!!!")
+        print("request all small stock is finished!!!!!!!!!")
         self.cur.close()
         self.connect.close()
 
@@ -65,14 +79,14 @@ class ShangHaiStock:
 
 
     def insertData(self,dataList,stockId):
-        print(dataList)
+        #print(dataList)
         if len(dataList) < 3:
             return
         grice = float(dataList[3])
         if grice < 6:
             return
 
-        strTemp = "sh" + str(stockId)
+        strTemp = "sz00" + self.getNumStr(stockId)
         state = self.getStocExist(strTemp)
         if state:
             updateSql = "update stock set name=?,curprice=?,gap=? where codename=?"
