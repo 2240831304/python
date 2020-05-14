@@ -4,9 +4,10 @@ import urllib.request
 import sqlite3
 from multiprocessing import Process
 import multiprocessing
+import requests
 
-
-requesturl = "http://hq.sinajs.cn/list=s_sh"
+#requesturl = "http://hq.sinajs.cn/list=s_sh"
+requesturl = "http://qt.gtimg.cn/q=s_sh"
 
 
 class ShangHaiStock:
@@ -45,36 +46,42 @@ class ShangHaiStock:
 
             url = requesturl + str(startID)
             #print(url)
-            req = urllib.request.urlopen(url)
-            self.parseData(req.read(),startID)
+            req = requests.get(url=url)
+            #print(req.content)
+            self.parseData(req.content, startID)
+
+            #req = urllib.request.urlopen(url)
+            #self.parseData(req.read(),startID)
 
             startID += 1
 
+        print("request all shanghai stock is finished!!!!!!!!!")
         self.cur.close()
         self.connect.close()
 
 
-    def reuqestData(self,stockId):
-        url = requesturl + str(stockId)
-        print(url)
-        req = urllib.request.urlopen(url)
-
-        if req.read() == "":
-            print("request stock is not exist,id=",stockId)
-            return
-        self.parseData(req.read())
-
-
     def parseData(self,data,stockId):
-        tempData = data.decode("utf8","ignore")
+        #print(data)
+        tempData = data.decode("GBK")
         #print(tempData)
 
-        datalist = tempData.split(",")
+        datalist = tempData.split("~")
         self.insertData(datalist,stockId)
 
 
     def insertData(self,dataList,stockId):
         print(dataList)
+        if len(dataList) < 3:
+            return
+        grice = float(dataList[3])
+        if grice < 6:
+            return
+
+        strTemp = "sh" + str(stockId)
+        insertSql = "insert into stock(name,codename,curprice,gap) values(?,?,?,?)"
+        self.cur.execute(insertSql,(dataList[1],strTemp,dataList[3],dataList[4]))
+        self.connect.commit()
+
 
 
     def getStocExist(self,codeId):
