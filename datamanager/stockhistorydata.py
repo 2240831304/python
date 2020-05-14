@@ -112,8 +112,10 @@ class StockHistoryData:
 
     def updateData(self,dataPt):
         #print(dataPt)
-        updatesql = "update stock set minprice=?,maxprice=? where codename=?"
-        self.cur.execute(updatesql,(dataPt[0],dataPt[1],self.curExcuteCodeName))
+        updatesql = "update stock set minprice=?,maxprice=?,weekmin=?,weekmax=?,weekgap=?" \
+                    " where codename=?"
+        self.cur.execute(updatesql,(dataPt[0],dataPt[1],dataPt[2],
+                                    dataPt[3],dataPt[4],self.curExcuteCodeName))
         self.connect.commit()
         self.curExcuteCodeName = ""
 
