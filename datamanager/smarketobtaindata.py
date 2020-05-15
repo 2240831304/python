@@ -60,6 +60,7 @@ class SmarketObtainData:
             self.parseData(req.read())
             self.executeId += 1
 
+        print("obatin smarket stock query price is finished!!!!")
         self.cur.close()
         self.connect.close()
 
