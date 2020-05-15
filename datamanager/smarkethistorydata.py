@@ -102,24 +102,24 @@ class SmarketHistoryData:
         # print(needData)
 
         #['2020-05-14', '16.63', '18.15', '1.42', '8.49%', '16.62', '18.50', '307022', '54609.15', '0.15%']
-        weekMin = 0
-        weekMax = 0
-        weekGap = 0
-        yearMinPrice = 0
-        yearMaxPrice = 0
+        # weekMin = 0
+        # weekMax = 0
+        # weekGap = 0
+        # yearMinPrice = 0
+        # yearMaxPrice = 0
         firstListData = needData[0]
         weekGap = firstListData[3]
         weekMin = firstListData[5]
         weekMax = firstListData[6]
-        yearMinPrice = firstListData[5]
-        yearMaxPrice = firstListData[6]
+        yearMinPrice = float(firstListData[5])
+        yearMaxPrice = float(firstListData[6])
 
         for value in needData:
-            if yearMinPrice > value[5]:
-                yearMinPrice = value[5]
+            if yearMinPrice > float(value[5]):
+                yearMinPrice = float(value[5])
 
-            if yearMaxPrice < value[6]:
-                yearMaxPrice = value[6]
+            if yearMaxPrice < float(value[6]):
+                yearMaxPrice = float(value[6])
 
         listData = list()
         listData.append(yearMinPrice)
