@@ -10,7 +10,7 @@ import configparser
 
 
 #requesturl = "http://hq.sinajs.cn/list="
-requesturl = "http://q.stock.sohu.com/hisHq?code=cn_%s&start=20190501&end=20200514&stat=0&order=D&period=m"
+requesturl = "http://q.stock.sohu.com/hisHq?code=cn_%s&start=%s&end=%s&stat=0&order=D&period=m"
 
 
 class SmarketHistoryData:
@@ -56,6 +56,9 @@ class SmarketHistoryData:
             self.executeId = 1
         print("get smarket stock history max and min price,start id=", self.executeId)
 
+        startdate = conf.get("historydate", "startdate")
+        enddate = conf.get("historydate", "enddate")
+
         while valuePt.value :
             if self.executeId > self.maxID :
                 self.executeId = 1
@@ -70,7 +73,7 @@ class SmarketHistoryData:
             self.curExcuteCodeName = codename
             codename = codename.replace("sh","")
             codename = codename.replace("sz", "")
-            url = requesturl % (codename)
+            url = requesturl % (codename,startdate,enddate)
             #print(url)
 
             req = urllib.request.urlopen(url)

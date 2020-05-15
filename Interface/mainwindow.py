@@ -216,9 +216,11 @@ class MainWindow(Frame):
     def obtainDataSlot(self):
         if self.obtainDataState :
             self.obtainDataState = False
+            self.obtainDataBut["bg"] = "green"
             self.obtainDataBut["text"] = "停止请求数据"
             self.objectPt.execute()
         else:
             self.obtainDataState = True
+            self.obtainDataBut["bg"] = "white"
             self.obtainDataBut["text"] = "获取A股实时数据"
             self.objectPt.setExecuteState(False)
