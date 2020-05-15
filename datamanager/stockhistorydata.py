@@ -5,6 +5,8 @@ import sqlite3
 from multiprocessing import Process
 import multiprocessing
 import json
+import os
+import configparser
 
 
 #requesturl = "http://hq.sinajs.cn/list="
@@ -42,8 +44,17 @@ class StockHistoryData:
     def requestData(self,valuePt):
         self.openDatabase()
         self.maxID = int(self.getMaxID())
-        print(self.maxID)
+        print("get A stock history max and min price,totle=",self.maxID)
         #print(valuePt.value)
+
+        cur_path = os.path.dirname(os.path.realpath(__file__))
+        config_path = cur_path + "/config/stock.ini"
+        conf = configparser.ConfigParser()
+        conf.read(config_path)
+        self.executeId = conf.getint("history","stockid")
+        if self.executeId >= self.maxID:
+            self.executeId = 1
+        print("get A stock history max and min price,start id=", self.executeId)
 
         while valuePt.value :
             if self.executeId > self.maxID :
@@ -68,17 +79,24 @@ class StockHistoryData:
 
             self.executeId += 1
 
+        conf.set("history","stockid",str(self.executeId))
+        with open(config_path, 'w') as fw:
+            conf.write(fw)
+
         print("get A stock history max and min price request is finished!!")
         self.cur.close()
         self.connect.close()
 
 
     def parseData(self,data):
-        tempData = data.decode("utf8","ignore")
-        tempData = tempData.replace("\n","")
-        strToListData = eval(tempData)
-        dictData = strToListData[0]
-        needData = dictData["hq"]
+        try:
+            tempData = data.decode("utf8","ignore")
+            tempData = tempData.replace("\n","")
+            strToListData = eval(tempData)
+            dictData = strToListData[0]
+            needData = dictData["hq"]
+        except:
+            return
         # print(needData)
 
         #['2020-05-14', '16.63', '18.15', '1.42', '8.49%', '16.62', '18.50', '307022', '54609.15', '0.15%']
