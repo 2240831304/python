@@ -69,9 +69,13 @@ class ObtainData:
         tempData = data.decode("utf8","ignore")
         #print(tempData)
 
-        datalist = tempData.split(",")
-        #print(datalist[3])
-        self.insertData(datalist[3],datalist[2])
+        try:
+            datalist = tempData.split(",")
+            #print(datalist[3])
+            self.insertData(datalist[3],datalist[2])
+        except:
+            print("stock get often data is encounter error,id=",self.executeId)
+
 
 
     def getStockNum(self,codeId):
