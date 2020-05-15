@@ -5,6 +5,8 @@ import sqlite3
 from multiprocessing import Process
 import multiprocessing
 import requests
+import os
+import configparser
 
 #requesturl = "http://hq.sinajs.cn/list=s_sh"
 requesturl = "http://qt.gtimg.cn/q=s_sh"
@@ -36,7 +38,17 @@ class ShangHaiStock:
     def requestData(self, valuePt):
         self.openDatabase()
 
-        startID = 600000
+        cur_path = os.path.dirname(os.path.realpath(__file__))
+        config_path = cur_path + "/config/stock.ini"
+        conf = configparser.ConfigParser()
+        conf.read(config_path)
+        startID = conf.getint("stockid","shanghai")
+
+        if startID >= 610000 :
+            print("obtain smarket stock restart new query")
+            startID = 600000
+
+        print("obtain shanghai stock start codename=",startID)
 
         while valuePt.value and (startID < 610000) :
             url = requesturl + str(startID)
@@ -50,6 +62,9 @@ class ShangHaiStock:
 
             startID += 1
 
+        conf.set("stockid", "shanghai", str(startID))
+        with open(config_path, 'w') as fw:
+            conf.write(fw)
         print("request all shanghai stock is finished!!!!!!!!!")
         self.cur.close()
         self.connect.close()

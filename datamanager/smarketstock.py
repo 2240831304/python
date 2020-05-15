@@ -8,6 +8,8 @@ import requests
 
 #requesturl = "http://hq.sinajs.cn/list=s_sz"
 requesturl = "http://qt.gtimg.cn/q=s_sz"
+import os
+import configparser
 
 
 class SmarketStock:
@@ -36,7 +38,18 @@ class SmarketStock:
     def requestData(self, valuePt):
         self.openDatabase()
 
-        startID = 300000
+        cur_path = os.path.dirname(os.path.realpath(__file__))
+        config_path = cur_path + "/config/stock.ini"
+        conf = configparser.ConfigParser()
+        conf.read(config_path)
+        startID = conf.getint("stockid","smarket")
+
+        if startID >= 301000 :
+            print("obtain smarket stock restart new query")
+            startID = 300000
+
+        print("obtain smarket stock start codename=",startID)
+
 
         while valuePt.value and (startID < 301000) :
             url = requesturl + str(startID)
@@ -49,6 +62,10 @@ class SmarketStock:
             #self.parseData(req.read(),startID)
 
             startID += 1
+
+        conf.set("stockid","smarket",str(startID))
+        with open(config_path, 'w') as fw:
+            conf.write(fw)
 
         print("request all smarket stock is finished!!!!!!!!!")
         self.cur.close()

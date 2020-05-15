@@ -8,6 +8,8 @@ import requests
 
 #requesturl = "http://hq.sinajs.cn/list=s_sh"
 requesturl = "http://qt.gtimg.cn/q=s_sz00"
+import os
+import configparser
 
 
 class SmallStock:
@@ -50,7 +52,18 @@ class SmallStock:
     def requestData(self, valuePt):
         self.openDatabase()
 
-        startID = 0
+        cur_path = os.path.dirname(os.path.realpath(__file__))
+        config_path = cur_path + "/config/stock.ini"
+        conf = configparser.ConfigParser()
+        conf.read(config_path)
+        startID = conf.getint("stockid","small")
+
+        if startID >= 10000 :
+            print("obtain small stock restart new query")
+            startID = 0
+
+        print("obtain small stock start codename=",startID)
+
 
         while valuePt.value and (startID < 10000) :
             url = requesturl + self.getNumStr(startID)
@@ -63,6 +76,10 @@ class SmallStock:
             #self.parseData(req.read(),startID)
 
             startID += 1
+
+        conf.set("stockid","small",str(startID))
+        with open(config_path, 'w') as fw:
+            conf.write(fw)
 
         print("request all small stock is finished!!!!!!!!!")
         self.cur.close()
