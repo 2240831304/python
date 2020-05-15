@@ -11,7 +11,7 @@ import json
 requesturl = "http://q.stock.sohu.com/hisHq?code=cn_%s&start=20190501&end=20200514&stat=0&order=D&period=m"
 
 
-class StockHistoryData:
+class SmarketHistoryData:
     def __init__(self):
         self.executeId = 1
         self.curExcuteCodeName = ""
@@ -42,13 +42,13 @@ class StockHistoryData:
     def requestData(self,valuePt):
         self.openDatabase()
         self.maxID = int(self.getMaxID())
-        print(self.maxID)
+        print("obtain smarket stock history max min price,totle=",self.maxID)
         #print(valuePt.value)
 
         while valuePt.value :
             if self.executeId > self.maxID :
                 self.executeId = 1
-                print("stockhistorydata.py requestData  is finished!!!!!!!!")
+                print("smarkethistorydata.py requestData  is finished!!!!!!!!")
                 break
 
             codename = self.getStockNum(self.executeId)
@@ -68,7 +68,7 @@ class StockHistoryData:
 
             self.executeId += 1
 
-        print("get A stock history max and min price request is finished!!")
+        print("get smarket  stock history max and min price request is finished!!")
         self.cur.close()
         self.connect.close()
 
@@ -113,7 +113,7 @@ class StockHistoryData:
 
     def updateData(self,dataPt):
         #print(dataPt)
-        updatesql = "update stock set minprice=?,maxprice=?,weekmin=?,weekmax=?,weekgap=?" \
+        updatesql = "update smarket set minprice=?,maxprice=?,weekmin=?,weekmax=?,weekgap=?" \
                     " where codename=?"
         self.cur.execute(updatesql,(dataPt[0],dataPt[1],dataPt[2],
                                     dataPt[3],dataPt[4],self.curExcuteCodeName))
@@ -124,13 +124,13 @@ class StockHistoryData:
     def insertData(self,price,yesterdayprice):
         gapnum = float(price) - float(yesterdayprice)
         gapnum = '%.2f' % gapnum
-        sql = "update stock set curprice=?,gap=?,state=? where id=?"
+        sql = "update smarket set curprice=?,gap=?,state=? where id=?"
         self.cur.execute(sql, (price,gapnum,1, self.executeId))
         self.connect.commit()
 
 
     def getStockNum(self,codeId):
-        sql = "select codename from stock where id=?"
+        sql = "select codename from smarket where id=?"
         self.cur.execute(sql, (codeId,))
         resultAll = self.cur.fetchone()
         #print(resultAll[0])
@@ -146,7 +146,7 @@ class StockHistoryData:
 
 
     def getMaxID(self):
-        sql = "select max(id) from stock"
+        sql = "select max(id) from smarket"
         self.cur.execute(sql)
         result = self.cur.fetchone()
 

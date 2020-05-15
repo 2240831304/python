@@ -5,7 +5,7 @@ from database import createdatabase
 from datamanager import insertsharewindow,selectdatawindow
 from datamanager import obtaindata,shanghaistock,smarketobtaindata
 from datamanager import smarketstock,smallstock
-from datamanager import stockhistorydata
+from datamanager import stockhistorydata,smarkethistorydata
 import platform
 import os
 
@@ -56,6 +56,7 @@ class MainWindow(Frame):
         self.smallObject = smallstock.SmallStock()
 
         self.stockHistoryObject = stockhistorydata.StockHistoryData()
+        self.smarketHistoryObject = smarkethistorydata.SmarketHistoryData()
 
 
         createDataBaseBut = Button(self,text="建数据库",command=self.createDatabaseSLot)
@@ -99,8 +100,14 @@ class MainWindow(Frame):
             self.stockHistoryObject.setExecuteState(False)
 
     def smarketHistorySlot(self):
-        pass
-
+        if self.smarketHistoryState:
+            self.smarketHistoryState = False
+            self.smarketHistoryBut["text"] = "停止请求数据"
+            self.smarketHistoryObject.excute()
+        else:
+            self.smarketHistoryState = True
+            self.smarketHistoryBut["text"] = "获取创业板历史价格"
+            self.smarketHistoryObject.setExecuteState(False)
 
 
     def smarketSlot(self):
