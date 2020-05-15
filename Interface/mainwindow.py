@@ -69,43 +69,47 @@ class MainWindow(Frame):
         selectDataBut = Button(self, text="查询数据", command=self.selectDataSlot)
         selectDataBut.grid(row=1, column=1)
 
-        self.smarketBut = Button(self, text="获取创业板股票", command=self.smarketSlot)
+        self.smarketBut = Button(self, text="获取创业板股票",activebackground ="red", command=self.smarketSlot)
         self.smarketBut.grid(row=2, column=0)
-        self.shanghaiBut = Button(self, text="获取上证股票", command=self.shanghaiSlot)
+        self.shanghaiBut = Button(self, text="获取上证股票",activebackground ="red", command=self.shanghaiSlot)
         self.shanghaiBut.grid(row=2, column=1)
-        self.smallBut = Button(self, text="获取中小板股票", command=self.smallSlot)
+        self.smallBut = Button(self, text="获取中小板股票",activebackground ="red", command=self.smallSlot)
         self.smallBut.grid(row=2, column=2)
 
-        self.stockHistoryBut = Button(self, text="获取A股历史价格", command=self.stockHistorySlot)
+        self.stockHistoryBut = Button(self, text="获取A股历史价格",activebackground ="red", command=self.stockHistorySlot)
         self.stockHistoryBut.grid(row=3, column=0)
 
-        self.smarketHistoryBut = Button(self, text="获取创业板历史价格", command=self.smarketHistorySlot)
+        self.smarketHistoryBut = Button(self, text="获取创业板历史价格",activebackground ="red",command=self.smarketHistorySlot)
         self.smarketHistoryBut.grid(row=3, column=1)
 
-        self.obtainDataBut = Button(self, text="获取A股实时数据", command=self.obtainDataSlot)
+        self.obtainDataBut = Button(self, text="获取A股实时数据",activebackground ="red",command=self.obtainDataSlot)
         self.obtainDataBut.grid(row=4, column=0)
 
-        self.smarketDataGetBut = Button(self, text="获取创业板实时数据", command=self.smarketDataGetSlot)
+        self.smarketDataGetBut = Button(self, text="获取创业板实时数据",activebackground ="red", command=self.smarketDataGetSlot)
         self.smarketDataGetBut.grid(row=4, column=1)
 
 
     def stockHistorySlot(self):
         if self.stockHistoryState:
             self.stockHistoryState = False
+            self.stockHistoryBut["bg"] = "green"
             self.stockHistoryBut["text"] = "停止请求数据"
             self.stockHistoryObject.excute()
         else:
             self.stockHistoryState = True
+            self.stockHistoryBut["bg"] = "white"
             self.stockHistoryBut["text"] = "获取A股历史价格"
             self.stockHistoryObject.setExecuteState(False)
 
     def smarketHistorySlot(self):
         if self.smarketHistoryState:
             self.smarketHistoryState = False
+            self.smarketHistoryBut["bg"] = "green"
             self.smarketHistoryBut["text"] = "停止请求数据"
             self.smarketHistoryObject.excute()
         else:
             self.smarketHistoryState = True
+            self.smarketHistoryBut["bg"] = "white"
             self.smarketHistoryBut["text"] = "获取创业板历史价格"
             self.smarketHistoryObject.setExecuteState(False)
 
@@ -113,20 +117,24 @@ class MainWindow(Frame):
     def smarketSlot(self):
         if self.smarketState:
             self.smarketState = False
+            self.smarketBut["bg"] = "green"
             self.smarketBut["text"] = "停止请求数据"
             self.smarketObject.excute()
         else:
             self.smarketState = True
+            self.smarketBut["bg"] = "white"
             self.smarketBut["text"] = "获取创业板股票"
             self.smarketObject.setExecuteState(False)
 
     def shanghaiSlot(self):
         if self.shanghaiState:
             self.shanghaiState = False
+            self.shanghaiBut["bg"] = "green"
             self.shanghaiBut["text"] = "停止请求数据"
             self.shanghaiObject.excute()
         else:
             self.shanghaiState = True
+            self.shanghaiBut["bg"] = "white"
             self.shanghaiBut["text"] = "获取上证股票"
             self.shanghaiObject.setExecuteState(False)
 
@@ -134,10 +142,12 @@ class MainWindow(Frame):
     def smallSlot(self):
         if self.smallState:
             self.smallState = False
+            self.smallBut["bg"] = "green"
             self.smallBut["text"] = "停止请求数据"
             self.smallObject.excute()
         else:
             self.smallState = True
+            self.smallBut["bg"] = "white"
             self.smallBut["text"] = "获取中小板股票"
             self.smallObject.setExecuteState(False)
 
@@ -145,10 +155,12 @@ class MainWindow(Frame):
     def smarketDataGetSlot(self):
         if self.smarketDataGetState:
             self.smarketDataGetState = False
+            self.smarketDataGetBut["bg"] = "green"
             self.smarketDataGetBut["text"] = "停止请求数据"
             self.smarketDataGetObject.execute()
         else:
             self.smarketDataGetState =  True
+            self.smarketDataGetBut["bg"] = "white"
             self.smarketDataGetBut["text"] = "获取创业板实时数据"
             self.smarketDataGetObject.setExecuteState(False)
 
