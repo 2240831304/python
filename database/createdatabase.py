@@ -12,7 +12,7 @@ class CreateDataBaseWindow(Frame):
         self.tableEntry = None
         self.databaseEntry = None
 
-        self.fieldEntry = None
+        self.addFieldEntry = None
 
         self.init_window()
 
@@ -39,6 +39,13 @@ class CreateDataBaseWindow(Frame):
 
         createTableBut = Button(self,text="建设表",command=self.createTable)
         createTableBut.grid(row=1,column=1,sticky=E)
+
+        fieldNameLabel = Label(self, text="字段名字")
+        fieldNameLabel.grid(row=3,column=0)
+        self.addFieldEntry = Entry(self)
+        self.addFieldEntry.grid(row=3,column=1)
+        addFieldBut = Button(self,text="添加字段",command=self.addFeildSlot)
+        addFieldBut.grid(row=4,column=0)
 
         path = os.getcwd()
         self.databaseFilePath = path + "/databasefile/"
@@ -81,6 +88,42 @@ class CreateDataBaseWindow(Frame):
             print('创建表失败')
         finally:
             pass
+
+        # 关闭游标
+        cur.close()
+        # 关闭连接
+        connectstate.close()
+
+
+    def addFeildSlot(self):
+        if self.addFieldEntry.get() == "":
+            print("input field name is null!!!!!!!!!")
+            return
+
+        filePath = self.databaseFilePath + "stock.db"
+        print("database filepath =", filePath)
+
+        stocksql = "ALTER TABLE stock  ADD COLUMN " + self.addFieldEntry.get()
+        stocksql = stocksql + " TEXT"
+        smarketsql = "ALTER TABLE smarket ADD COLUMN " + self.addFieldEntry.get()
+        smarketsql = smarketsql + " TEXT"
+
+
+        connectstate = sqlite3.connect(filePath)
+        cur = connectstate.cursor()
+        try:
+            cur.execute(stocksql)
+            connectstate.commit()
+        except Exception as e:
+            print(e)
+            print('创建表失败')
+
+        try:
+            cur.execute(smarketsql)
+            connectstate.commit()
+        except Exception as e:
+            print(e)
+            print('创建表失败')
 
         # 关闭游标
         cur.close()

@@ -21,6 +21,9 @@ class SmarketObtainData:
         self.progressValue = None
         self.maxID = 0
 
+        self.curminPrice = 0
+        self.curMaxPrice = 0
+        self.curState = 0
 
     def openDatabase(self):
         path = os.getcwd()
@@ -53,6 +56,8 @@ class SmarketObtainData:
             if codename == "" :
                 self.executeId += 1
                 continue
+
+            print("smarketobtaindata.py requestData current executeId==", self.executeId)
             url = requesturl + str(codename)
             #print(url)
             req = urllib.request.urlopen(url)
@@ -79,10 +84,14 @@ class SmarketObtainData:
 
 
     def getStockNum(self,codeId):
-        sql = "select codename from smarket where id=?"
+        sql = "select codename,minprice,maxprice,state from smarket where id=?"
         self.cur.execute(sql, (codeId,))
         resultAll = self.cur.fetchone()
-        #print(resultAll[0])
+        self.curminPrice = float(resultAll[1])
+        self.curMaxPrice = float(resultAll[2])
+        self.curState = int(resultAll[3])
+        # print(resultAll)
+
         if resultAll:
             return resultAll[0]
         else:
@@ -92,8 +101,26 @@ class SmarketObtainData:
     def insertData(self,price,yesterdayprice):
         gapnum = float(price) - float(yesterdayprice)
         gapnum = '%.2f' % gapnum
+
+        curPriceTemp = float(price)
+        if self.curState >= 5:
+            self.curState = 5
+        else:
+            onePrice = (self.curMaxPrice - self.curminPrice) / 4
+            onefourth = self.curminPrice + onePrice
+            twofourth = self.curminPrice + onePrice * 2
+            threefourth = self.curminPrice + onePrice * 3
+            if curPriceTemp <= onefourth:
+                self.curState = 1
+            elif (curPriceTemp > onefourth) and (curPriceTemp <= twofourth):
+                self.curState = 2
+            elif (curPriceTemp > twofourth) and (curPriceTemp <= threefourth):
+                self.curState = 3
+            else:
+                self.curState = 4
+
         sql = "update smarket set curprice=?,gap=?,state=? where id=?"
-        self.cur.execute(sql, (price,gapnum,1, self.executeId))
+        self.cur.execute(sql, (price,gapnum,self.curState, self.executeId))
         self.connect.commit()
 
 
