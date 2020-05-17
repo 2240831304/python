@@ -87,9 +87,14 @@ class ObtainData:
         sql = "select codename,minprice,maxprice,state from stock where id=?"
         self.cur.execute(sql, (codeId,))
         resultAll = self.cur.fetchone()
-        self.curminPrice = float(resultAll[1])
-        self.curMaxPrice = float(resultAll[2])
-        self.curState = int(resultAll[3])
+        try:
+            self.curminPrice = float(resultAll[1])
+            self.curMaxPrice = float(resultAll[2])
+            self.curState = int(resultAll[3])
+        except:
+            self.curminPrice = 0
+            self.curMaxPrice = 0
+            self.curState = 1
         #print(resultAll)
         if resultAll:
             return resultAll[0]
