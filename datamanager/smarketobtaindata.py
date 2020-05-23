@@ -108,8 +108,8 @@ class SmarketObtainData:
         gapnum = '%.2f' % gapnum
 
         curPriceTemp = float(price)
-        if self.curState >= 5:
-            self.curState = 5
+        if self.curState >= 7:
+            self.curState = self.curState
         else:
             onePrice = (self.curMaxPrice - self.curminPrice) / 4
             onefourth = self.curminPrice + onePrice
