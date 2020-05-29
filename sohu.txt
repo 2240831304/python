@@ -18,3 +18,12 @@ http://q.stock.sohu.com/hisHq?code=cn_000021&start=20180716&end=20200514&stat=0&
 "2018-07-20","61.22","61.83","0.61","1.00%","61.22","62.69","57637","35856.55","0.53%"
 日期，开盘，收盘，涨跌，涨幅，最低，最高，成交量，成交额，换手。
 
+
+update stock set introduce= where codename="";
+select name,codename,introduce from stock where introduce>0;
+
+select name,introduce from stock where introduce LIKE "106%";
+
+例如：
+1052334
+第一位默认。2，3，4，5位 月份日期。6位为分股数，7位为分红数
