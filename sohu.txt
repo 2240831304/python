@@ -19,10 +19,10 @@ http://q.stock.sohu.com/hisHq?code=cn_000021&start=20180716&end=20200514&stat=0&
 日期，开盘，收盘，涨跌，涨幅，最低，最高，成交量，成交额，换手。
 
 
-update stock set introduce= where codename="";
-select name,codename,introduce from stock where introduce>0;
+update stock set money= where codename="";
+select name,codename,money from stock where money>0;
 
-select name,introduce from stock where introduce LIKE "106%";
+select name,money from stock where money LIKE "106%";
 
 例如：
 1052334
