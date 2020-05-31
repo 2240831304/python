@@ -27,3 +27,6 @@ select name,introduce from stock where introduce LIKE "106%";
 例如：
 1052334
 第一位默认。2，3，4，5位 月份日期。6位为分股数，7位为分红数
+
+东方财富网站，可以参加查看分红日期:::
+http://data.eastmoney.com/yjfp/
